@@ -13,10 +13,12 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 
+// You shouldn't extend from Assert.
 public class TestInboxMails extends Assert{
 
 	private static final Logger log = Logger.getLogger(TestInboxMails.class);
 	private WebDriver driver;
+	// access modificator is absent
 	HomePage homePage;
 		
 	@BeforeTest
