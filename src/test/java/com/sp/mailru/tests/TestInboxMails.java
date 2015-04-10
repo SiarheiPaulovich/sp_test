@@ -1,4 +1,4 @@
-package com.sp.tasks;
+package com.sp.mailru.tests;
 
 import java.util.List;
 
@@ -12,14 +12,20 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import com.sp.mailru.entities.InboxMailListItem;
+import com.sp.mailru.pages.HomePage;
+import com.sp.mailru.pages.MailPage;
+import com.sp.mailru.pages.ProjectConstants;
+import com.sp.mailru.pages.SingletonFirefoxDriver;
 
-// You shouldn't extend from Assert.
-public class TestInboxMails extends Assert{
 
-	private static final Logger log = Logger.getLogger(TestInboxMails.class);
+public class TestInboxMails{
+
+	private static final Logger LOG = Logger.getLogger(TestInboxMails.class);
+
 	private WebDriver driver;
-	// access modificator is absent
-	HomePage homePage;
+
+	private HomePage homePage;
 		
 	@BeforeTest
 	public void init(){
@@ -30,7 +36,7 @@ public class TestInboxMails extends Assert{
 	
 	@BeforeMethod
 	public void openHomePage(){
-		homePage.openPage();
+		driver.get(ProjectConstants.HOME_URL);
 	}
 	
 	@AfterSuite
@@ -41,22 +47,22 @@ public class TestInboxMails extends Assert{
 	@Parameters({"username","password"})
 	@Test
 	public void testWelcomeMail(String username, String password){
-		log.info("Welcome mail test started");
-		assertTrue(driver.getTitle().contains("Mail.Ru:"));
+		LOG.info("Welcome mail test started");
+		Assert.assertTrue(driver.getTitle().contains("Mail.Ru:"));
 		if(homePage.isLogged()) homePage.logout();
 		MailPage mailPage = homePage.login(username, password, false);
-		assertEquals(homePage.isLogged(),true);
+		Assert.assertEquals(homePage.isLogged(),true);
 		
 		List<WebElement> inboxMailLinks = mailPage.getInboxMailLinksList();
 		boolean receivedWelcomeMail = false;
 		for(WebElement link : inboxMailLinks){
-			MailPage.InboxMail mail = mailPage.new InboxMail(link);
+			InboxMailListItem mail = mailPage.parseInboxMailLinkItem(link);
 			
 			if(mail.getFrom().contains("welcome@corp.mail.ru") && mail.getTitle().contains("Добро пожаловать в Mail.Ru")){
 				receivedWelcomeMail = true;
 			}
 		}
-		assertTrue(receivedWelcomeMail,"Didn't receive a Welcome-mail");
-		log.info("Welcome mail test finished");
+		Assert.assertTrue(receivedWelcomeMail,"Didn't receive a Welcome-mail");
+		LOG.info("Welcome mail test finished");
 	}
 }

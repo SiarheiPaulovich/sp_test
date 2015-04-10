@@ -1,4 +1,4 @@
-package com.sp.tasks;
+package com.sp.mailru.pages;
 
 import java.util.concurrent.TimeUnit;
 

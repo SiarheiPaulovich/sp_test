@@ -1,4 +1,4 @@
-package com.sp.tasks;
+package com.sp.mailru.tests;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -8,10 +8,13 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-// see comments to previous test
-public class TestLoginLogout extends Assert {
+import com.sp.mailru.pages.HomePage;
+import com.sp.mailru.pages.ProjectConstants;
+import com.sp.mailru.pages.SingletonFirefoxDriver;
 
-	private static final Logger log = Logger.getLogger(TestLoginLogout.class);
+public class TestLoginLogout{
+
+	private static final Logger LOG = Logger.getLogger(TestLoginLogout.class);
 	private WebDriver driver;
 	HomePage homePage;
 
@@ -29,31 +32,31 @@ public class TestLoginLogout extends Assert {
 
 	@BeforeMethod
 	public void openHomePage() {
-		homePage.openPage();
+		driver.get(ProjectConstants.HOME_URL);
 	}
 
 	@Test(dataProvider = "loginsTestProvider")
 	public void testLogin(String username, String password, boolean expectedToBeBeLogged) {
-		log.info("Login test started [" + username + "," + password + "," + expectedToBeBeLogged + "]");
-		assertTrue(driver.getTitle().contains("Mail.Ru:"));
+		LOG.info("Login test started [" + username + "," + password + "," + expectedToBeBeLogged + "]");
+		Assert.assertTrue(driver.getTitle().contains("Mail.Ru:"));
 		if (homePage.isLogged())
 			homePage.logout();
 		homePage.login(username, password, false);
 		// use assertFalse;
 		// use softAssert
-		assertEquals(homePage.isLogged(), expectedToBeBeLogged);
-		log.info("Login test finished");
+		Assert.assertEquals(homePage.isLogged(), expectedToBeBeLogged);
+		LOG.info("Login test finished");
 	}
 
 	@Test(dependsOnMethods = { "testLogin" })
 	public void testLogout() {
-		log.info("Logout test started");
+		LOG.info("Logout test started");
 
 		// fake assertion - if previous test method will be passed, so user is
 		// logged in, else this test will be skipped due to dependents
-		assertTrue(homePage.isLogged(), "User is not logged to perform logout");
+		Assert.assertTrue(homePage.isLogged(), "User is not logged to perform logout");
 		homePage.logout();
-		assertFalse(homePage.isLogged(), "User is still logged after logout");
-		log.info("Logout test finished");
+		Assert.assertFalse(homePage.isLogged(), "User is still logged after logout");
+		LOG.info("Logout test finished");
 	}
 }
