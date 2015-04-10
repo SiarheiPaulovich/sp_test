@@ -50,7 +50,7 @@ public class TestInboxMails extends Assert{
 		for(WebElement link : inboxMailLinks){
 			MailPage.InboxMail mail = mailPage.new InboxMail(link);
 			
-			if(mail.getFrom().contains("welcome@corp.mail.ru") && mail.getTitle().contains("Добро пожаловать в Mail.Ru")){
+			if(mail.getFrom().contains("welcome@corp.mail.ru") && mail.getTitle().contains("Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ РІ Mail.Ru")){
 				receivedWelcomeMail = true;
 			}
 		}
