@@ -1,6 +1,7 @@
 package com.sp.mailru.tests;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -9,6 +10,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -27,9 +29,11 @@ public class TestInboxMails{
 
 	private HomePage homePage;
 		
+	@Parameters({"pageTimeout"})
 	@BeforeTest
-	public void init(){
-		driver = SingletonFirefoxDriver.getInstance(5);
+	public void init(@Optional("10") int timeoutInSeconds){
+		driver = SingletonFirefoxDriver.getInstance();
+		driver.manage().timeouts().implicitlyWait(timeoutInSeconds, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
 		homePage = new HomePage(driver);
 	}
@@ -41,7 +45,7 @@ public class TestInboxMails{
 	
 	@AfterSuite
 	public void shutdown(){
-		driver.quit();
+		//driver.quit();
 	}
 		
 	@Parameters({"username","password"})

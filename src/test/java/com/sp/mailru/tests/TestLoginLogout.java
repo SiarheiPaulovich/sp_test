@@ -1,12 +1,17 @@
 package com.sp.mailru.tests;
 
+import java.util.concurrent.TimeUnit;
+
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import com.sp.mailru.pages.HomePage;
 import com.sp.mailru.pages.ProjectConstants;
@@ -20,12 +25,14 @@ public class TestLoginLogout{
 
 	@DataProvider(name = "loginsTestProvider")
 	public Object[][] loadTestData() {
-		return new Object[][] { { "bad_mail", "bad_password", false }, { "TrueTestMail", "TruePassword", true } };
+		return new Object[][] { { "bad_mail", "bad_password", true }, { "TrueTestMail", "TruePassword", true } };
 	}
 
+	@Parameters({"pageTimeout"})
 	@BeforeTest
-	public void init() {
-		driver = SingletonFirefoxDriver.getInstance(5);
+	public void init(@Optional("10") int timeoutInSeconds) {
+		driver = SingletonFirefoxDriver.getInstance();
+		driver.manage().timeouts().implicitlyWait(timeoutInSeconds, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
 		homePage = new HomePage(driver);
 	}
@@ -42,8 +49,7 @@ public class TestLoginLogout{
 		if (homePage.isLogged())
 			homePage.logout();
 		homePage.login(username, password, false);
-		// use assertFalse;
-		// use softAssert
+		//SoftAssert softAssert = new SoftAssert();
 		Assert.assertEquals(homePage.isLogged(), expectedToBeBeLogged);
 		LOG.info("Login test finished");
 	}
@@ -52,9 +58,6 @@ public class TestLoginLogout{
 	public void testLogout() {
 		LOG.info("Logout test started");
 
-		// fake assertion - if previous test method will be passed, so user is
-		// logged in, else this test will be skipped due to dependents
-		Assert.assertTrue(homePage.isLogged(), "User is not logged to perform logout");
 		homePage.logout();
 		Assert.assertFalse(homePage.isLogged(), "User is still logged after logout");
 		LOG.info("Logout test finished");

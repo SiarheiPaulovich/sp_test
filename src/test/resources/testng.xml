@@ -2,14 +2,14 @@
 <suite name="Task suite 1" verbose="1" >
   <test name="Task test 1" >
     <classes>
-      <class name="com.sp.tasks.TestLoginLogout"/>
+      <class name="com.sp.mailru.tests.TestLoginLogout"/>
     </classes>
  </test>
  <test name="Task test 2" >
  	<parameter name="username" value="TrueTestMail" />
  	<parameter name="password" value="TruePassword" />
     <classes>
-      <class name="com.sp.tasks.TestInboxMails"/>
+      <class name="com.sp.mailru.tests.TestInboxMails"/>
     </classes>
  </test>
 </suite>

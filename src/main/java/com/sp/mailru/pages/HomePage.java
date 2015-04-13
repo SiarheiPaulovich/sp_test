@@ -5,40 +5,48 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.How;
 
-// Use page object pattern (you can start reading of yandex elements http://habrahabr.ru/company/yandex/blog/158787/).
-// Page object should include repeated parts of page and other elements
+import com.sp.mailru.elements.AuthorizationForm;
+
+import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
+
 public class HomePage {
 
 	private static final Logger LOG = Logger.getLogger(HomePage.class);
 	
 	private WebDriver driver;
 	
-	private String baseUrl; 
-
+	private AuthorizationForm authorizationForm;
+	
+	@FindBy(how = How.ID, using = "PH_authView")
+	private WebElement logoutDisplay;
+	
+	@FindBy(how = How.ID, using = "PH_logoutLink")
+	private WebElement logoutLink;
+	
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
-		baseUrl = ProjectConstants.HOME_URL;
+		HtmlElementLoader.populatePageObject(this, driver);
 	}
 
-	// driver.find... should be replaced with element that will be initialized
-	// using @FindBy
 	public boolean isLogged() {
-		String display = driver.findElement(By.id("PH_authView")).getAttribute("style");
+		String display = logoutDisplay.getAttribute("style");
 		return ! display.trim().equals("display: none;");
 	}
 
 	public void logout() {
-		if (!isLogged())
-			return;
-		driver.findElement(By.id("PH_logoutLink")).click();
+		if (!isLogged()) return;
+		logoutLink.click();
 	}
 
 	// All elements via @FindBy. This method should a combination of another
 	// three: setUsername, setPassword, clickLogin(). It provides you
 	// flexibility for another tests: check error message if username is empty, etc.
 	// Bad idea to return null - the better way is to create your custom exceptions, and log error.
-	public MailPage login(String username, String password, boolean saveLogin) {
+	public MailPage login(String login, String password, boolean saveLogin) {
+		/*
 		WebElement loginTextField = null;
 		try {
 			loginTextField = driver.findElement(By.id("mailbox__login"));
@@ -68,6 +76,9 @@ public class HomePage {
 			return null;
 		}
 
+		*/
+		authorizationForm.login(login, password, saveLogin);
+		
 		if (isLogged())
 			return new MailPage(driver);
 		else
