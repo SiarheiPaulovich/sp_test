@@ -44,9 +44,12 @@ public class HomePage {
 		logoutLink.click();
 	}
 
-	public MailPage login(String login, String password, boolean saveLogin) {
+	@SuppressWarnings("rawtypes")
+	public Class login(String login, String password, boolean saveLogin) {
 		authorizationForm.login(login, password, saveLogin);
-		return new MailPage(driver);
+		return driver.getTitle().contains(ProjectConstants.MAIL_PAGE_IDENTIFIER_BY_TITLE)
+			? MailPage.class
+			: null;
 	}
 
 }

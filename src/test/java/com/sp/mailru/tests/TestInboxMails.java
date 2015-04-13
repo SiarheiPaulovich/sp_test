@@ -47,7 +47,9 @@ public class TestInboxMails{
 		LOG.info("Welcome mail test started");
 		if(homePage.isLogged()) homePage.logout();
 		Assert.assertFalse(homePage.isLogged());
-		MailPage mailPage = homePage.login(username, password, false);
+		Class<?> pageClass = homePage.login(username, password, false);
+		Assert.assertEquals(pageClass,MailPage.class);
+		MailPage mailPage = new MailPage(driver);
 		Assert.assertTrue(homePage.isLogged());
 		
 		List<WebElement> inboxMailLinks = mailPage.getInboxMailLinksList();
