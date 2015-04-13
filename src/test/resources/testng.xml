@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suite name="Task suite 1" verbose="1" >
+  <parameter name="username" value="TrueTestMail" />
+  <parameter name="password" value="TruePassword" />
   <test name="Task test 1" >
     <classes>
-      <class name="com.sp.mailru.tests.TestLoginLogout"/>
+      <class name="com.sp.mailru.tests.TestLogin"/>
     </classes>
  </test>
  <test name="Task test 2" >
- 	<parameter name="username" value="TrueTestMail" />
- 	<parameter name="password" value="TruePassword" />
+    <classes>
+      <class name="com.sp.mailru.tests.TestLogout"/>
+    </classes>
+ </test>
+ <test name="Task test 3" >
     <classes>
       <class name="com.sp.mailru.tests.TestInboxMails"/>
     </classes>

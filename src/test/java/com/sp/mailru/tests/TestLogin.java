@@ -4,7 +4,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
@@ -17,22 +16,25 @@ import com.sp.mailru.pages.HomePage;
 import com.sp.mailru.pages.ProjectConstants;
 import com.sp.mailru.pages.SingletonFirefoxDriver;
 
-public class TestLoginLogout{
+public class TestLogin {
 
-	private static final Logger LOG = Logger.getLogger(TestLoginLogout.class);
+	private static final Logger LOG = Logger.getLogger(TestLogin.class);
+
 	private WebDriver driver;
-	HomePage homePage;
+
+	private HomePage homePage;
 
 	@DataProvider(name = "loginsTestProvider")
 	public Object[][] loadTestData() {
-		return new Object[][] { { "bad_mail", "bad_password", true }, { "TrueTestMail", "TruePassword", true } };
+		return new Object[][] { { "bad_mail", "bad_password", false }, { "TrueTestMail", "TruePassword", true } };
 	}
 
-	@Parameters({"pageTimeout"})
+	@Parameters({ "pageTimeout" })
 	@BeforeTest
 	public void init(@Optional("10") int timeoutInSeconds) {
 		driver = SingletonFirefoxDriver.getInstance();
-		driver.manage().timeouts().implicitlyWait(timeoutInSeconds, TimeUnit.SECONDS);
+		driver.manage().timeouts()
+				.implicitlyWait(timeoutInSeconds, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
 		homePage = new HomePage(driver);
 	}
@@ -43,23 +45,23 @@ public class TestLoginLogout{
 	}
 
 	@Test(dataProvider = "loginsTestProvider")
-	public void testLogin(String username, String password, boolean expectedToBeBeLogged) {
-		LOG.info("Login test started [" + username + "," + password + "," + expectedToBeBeLogged + "]");
-		Assert.assertTrue(driver.getTitle().contains("Mail.Ru:"));
+	public void testLogin(String username, String password,
+			boolean expectedToBeBeLogged) {
+		LOG.info("Login test started [" + username + "," + password + ","
+				+ expectedToBeBeLogged + "]");
+		SoftAssert softAssert = new SoftAssert();
 		if (homePage.isLogged())
 			homePage.logout();
-		homePage.login(username, password, false);
-		//SoftAssert softAssert = new SoftAssert();
-		Assert.assertEquals(homePage.isLogged(), expectedToBeBeLogged);
+		softAssert.assertFalse(homePage.isLogged());
+		
+		try{
+			homePage.login(username, password, false);
+		}catch(IllegalStateException e){
+			if(expectedToBeBeLogged) throw e;
+		}
+		softAssert.assertEquals(homePage.isLogged(), expectedToBeBeLogged);
+		softAssert.assertAll();
 		LOG.info("Login test finished");
 	}
 
-	@Test(dependsOnMethods = { "testLogin" })
-	public void testLogout() {
-		LOG.info("Logout test started");
-
-		homePage.logout();
-		Assert.assertFalse(homePage.isLogged(), "User is still logged after logout");
-		LOG.info("Logout test finished");
-	}
 }

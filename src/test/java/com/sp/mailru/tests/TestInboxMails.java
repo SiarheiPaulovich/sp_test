@@ -8,7 +8,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -17,7 +16,6 @@ import org.testng.annotations.Test;
 import com.sp.mailru.entities.InboxMailListItem;
 import com.sp.mailru.pages.HomePage;
 import com.sp.mailru.pages.MailPage;
-import com.sp.mailru.pages.ProjectConstants;
 import com.sp.mailru.pages.SingletonFirefoxDriver;
 
 
@@ -38,30 +36,24 @@ public class TestInboxMails{
 		homePage = new HomePage(driver);
 	}
 	
-	@BeforeMethod
-	public void openHomePage(){
-		driver.get(ProjectConstants.HOME_URL);
-	}
-	
 	@AfterSuite
 	public void shutdown(){
-		//driver.quit();
+		driver.quit();
 	}
 		
 	@Parameters({"username","password"})
 	@Test
 	public void testWelcomeMail(String username, String password){
 		LOG.info("Welcome mail test started");
-		Assert.assertTrue(driver.getTitle().contains("Mail.Ru:"));
 		if(homePage.isLogged()) homePage.logout();
+		Assert.assertFalse(homePage.isLogged());
 		MailPage mailPage = homePage.login(username, password, false);
-		Assert.assertEquals(homePage.isLogged(),true);
+		Assert.assertTrue(homePage.isLogged());
 		
 		List<WebElement> inboxMailLinks = mailPage.getInboxMailLinksList();
 		boolean receivedWelcomeMail = false;
 		for(WebElement link : inboxMailLinks){
 			InboxMailListItem mail = mailPage.parseInboxMailLinkItem(link);
-			
 			if(mail.getFrom().contains("welcome@corp.mail.ru") && mail.getTitle().contains("Добро пожаловать в Mail.Ru")){
 				receivedWelcomeMail = true;
 			}
