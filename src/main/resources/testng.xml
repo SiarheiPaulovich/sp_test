@@ -2,6 +2,9 @@
 <suite name="Task suite 1" verbose="1" >
   <parameter name="username" value="TrueTestMail" />
   <parameter name="password" value="TruePassword" />
+  <listeners>
+    <listener class-name="com.sp.mailru.runner.SuiteListener" />
+  </listeners>
   <test name="Task test 1" >
     <classes>
       <class name="com.sp.mailru.tests.TestLogin"/>

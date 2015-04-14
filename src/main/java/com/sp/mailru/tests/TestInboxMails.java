@@ -3,7 +3,6 @@ package com.sp.mailru.tests;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -13,15 +12,14 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import com.sp.mailru.constants.ProjectConstants;
+import com.sp.mailru.driver.SingletonFirefoxDriver;
 import com.sp.mailru.entities.InboxMailListItem;
 import com.sp.mailru.pages.HomePage;
 import com.sp.mailru.pages.MailPage;
-import com.sp.mailru.pages.SingletonFirefoxDriver;
 
 
 public class TestInboxMails{
-
-	private static final Logger LOG = Logger.getLogger(TestInboxMails.class);
 
 	private WebDriver driver;
 
@@ -34,6 +32,8 @@ public class TestInboxMails{
 		driver.manage().timeouts().implicitlyWait(timeoutInSeconds, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
 		homePage = new HomePage(driver);
+		Assert.assertTrue(homePage.checkPage(ProjectConstants.HOME_PAGE_IDENTIFIER_BY_TITLE));
+		homePage.init();
 	}
 	
 	@AfterSuite
@@ -44,13 +44,12 @@ public class TestInboxMails{
 	@Parameters({"username","password"})
 	@Test
 	public void testWelcomeMail(String username, String password){
-		LOG.info("Welcome mail test started");
 		if(homePage.isLogged()) homePage.logout();
 		Assert.assertFalse(homePage.isLogged());
-		Class<?> pageClass = homePage.login(username, password, false);
-		Assert.assertEquals(pageClass,MailPage.class);
-		MailPage mailPage = new MailPage(driver);
-		Assert.assertTrue(homePage.isLogged());
+		MailPage mailPage = homePage.login(username, password, false);
+		Assert.assertTrue(mailPage.checkPage(ProjectConstants.MAIL_PAGE_IDENTIFIER_BY_TITLE));
+		mailPage.init();
+		Assert.assertTrue(mailPage.isLogged());
 		
 		List<WebElement> inboxMailLinks = mailPage.getInboxMailLinksList();
 		boolean receivedWelcomeMail = false;
@@ -61,6 +60,5 @@ public class TestInboxMails{
 			}
 		}
 		Assert.assertTrue(receivedWelcomeMail,"Didn't receive a Welcome-mail");
-		LOG.info("Welcome mail test finished");
 	}
 }

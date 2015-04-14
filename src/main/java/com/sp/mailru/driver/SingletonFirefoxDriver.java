@@ -1,4 +1,4 @@
-package com.sp.mailru.pages;
+package com.sp.mailru.driver;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;

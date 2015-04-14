@@ -1,4 +1,4 @@
-package com.sp.mailru.pages;
+package com.sp.mailru.constants;
 
 public class ProjectConstants {
 	

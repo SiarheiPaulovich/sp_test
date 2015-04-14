@@ -13,13 +13,13 @@ public class AuthorizationForm extends HtmlElement {
 	private WebElement loginField;
 
 	@FindBy(id = "mailbox__password")
-	private WebElement passwordField;
+	WebElement passwordField;
 
 	@FindBy(id = "mailbox__auth__remember__checkbox")
-	private WebElement saveLoginCheckbox;
+	WebElement saveLoginCheckbox;
 
 	@FindBy(id = "mailbox__auth__button")
-	private WebElement submitButton;
+	WebElement submitButton;
 
 	public void login(String login, String password, boolean saveLogin) {
 		loginField.clear();

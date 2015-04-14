@@ -1,4 +1,4 @@
-package com.sp.mailru.tests;
+package com.sp.mailru.runner;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,7 +14,7 @@ public class TestRunner {
 
 	public static void main(String[] args) {
 		final TestNG testNG = new TestNG(true);
-		final Parser parser = new Parser("src\\test\\resources\\testng.xml");
+		final Parser parser = new Parser("src\\main\\resources\\testng.xml");
 		List<XmlSuite> suites = null;
 		try {
 			suites = parser.parseToList();

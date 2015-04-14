@@ -2,7 +2,7 @@ package com.sp.mailru.tests;
 
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
@@ -12,13 +12,11 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
+import com.sp.mailru.constants.ProjectConstants;
+import com.sp.mailru.driver.SingletonFirefoxDriver;
 import com.sp.mailru.pages.HomePage;
-import com.sp.mailru.pages.ProjectConstants;
-import com.sp.mailru.pages.SingletonFirefoxDriver;
 
 public class TestLogin {
-
-	private static final Logger LOG = Logger.getLogger(TestLogin.class);
 
 	private WebDriver driver;
 
@@ -37,23 +35,23 @@ public class TestLogin {
 				.implicitlyWait(timeoutInSeconds, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
 		homePage = new HomePage(driver);
+		Assert.assertTrue(homePage.checkPage(ProjectConstants.HOME_PAGE_IDENTIFIER_BY_TITLE));
+		homePage.init();
 	}
 
 	@BeforeMethod
 	public void openHomePage() {
 		driver.get(ProjectConstants.HOME_URL);
+		Assert.assertTrue(homePage.checkPage(ProjectConstants.HOME_PAGE_IDENTIFIER_BY_TITLE));
 	}
 
 	@Test(dataProvider = "loginsTestProvider")
-	public void testLogin(String username, String password,
-			boolean expectedToBeBeLogged) {
-		LOG.info("Login test started [" + username + "," + password + ","
-				+ expectedToBeBeLogged + "]");
+	public void testLogin(String username, String password,	boolean expectedToBeBeLogged) {
 		SoftAssert softAssert = new SoftAssert();
 		if (homePage.isLogged())
 			homePage.logout();
 		softAssert.assertFalse(homePage.isLogged());
-		
+
 		try{
 			homePage.login(username, password, false);
 		}catch(IllegalStateException e){
@@ -61,7 +59,6 @@ public class TestLogin {
 		}
 		softAssert.assertEquals(homePage.isLogged(), expectedToBeBeLogged);
 		softAssert.assertAll();
-		LOG.info("Login test finished");
 	}
 
 }
