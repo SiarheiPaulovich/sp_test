@@ -26,6 +26,11 @@
   		<artifactId>htmlelements-java</artifactId>
   		<version>1.12</version>
   	</dependency>
+  	<dependency>
+  		<groupId>com.google.inject</groupId>
+  		<artifactId>guice</artifactId>
+  		<version>3.0</version>
+  	</dependency>
   </dependencies>
   <build>
     <sourceDirectory>${project.basedir}\src\main\java</sourceDirectory>
@@ -97,7 +102,7 @@
         <version>2.10</version>
 		<configuration>
           <suiteXmlFiles>
-            <suiteXmlFile>${project.basedir}\src\test\resources\testng.xml</suiteXmlFile>
+            <suiteXmlFile>${project.basedir}\src\main\resources\testng.xml</suiteXmlFile>
           </suiteXmlFiles>
         </configuration>
         <executions>
