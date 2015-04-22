@@ -1,15 +1,13 @@
 package com.sp.mailru.tests;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Guice;
-import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -29,14 +27,10 @@ public class TestInboxMails{
 	@Inject
 	private HomePage homePage;
 		
-	@Parameters({"pageTimeout"})
-	@BeforeTest
-	public void init(@Optional("10") int timeoutInSeconds){
-		driver.manage().timeouts().implicitlyWait(timeoutInSeconds, TimeUnit.SECONDS);
-		driver.manage().window().maximize();
+	@BeforeMethod
+	public void openHomePage() {
 		homePage.openPage();
 		Assert.assertTrue(homePage.checkPage(ProjectConstants.HOME_PAGE_IDENTIFIER_BY_TITLE));
-		homePage.init();
 	}
 	
 	@AfterSuite
@@ -51,7 +45,6 @@ public class TestInboxMails{
 		Assert.assertFalse(homePage.isLogged());
 		MailPage mailPage = homePage.login(username, password, false);
 		Assert.assertTrue(mailPage.checkPage(ProjectConstants.MAIL_PAGE_IDENTIFIER_BY_TITLE));
-		mailPage.init();
 		Assert.assertTrue(mailPage.isLogged());
 		
 		List<WebElement> inboxMailLinks = mailPage.getInboxMailLinksList();

@@ -22,10 +22,7 @@ public class MailPage extends AbstractPage{
 	private WebElement datalistBody;
 	
 	public MailPage(WebDriver driver){
-		this.driver = driver;
-	}
-
-	public void init(){
+		super(driver);
 		PageFactory.initElements(new HtmlElementDecorator(driver), this);
 	}
 	

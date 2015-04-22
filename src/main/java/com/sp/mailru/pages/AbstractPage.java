@@ -6,7 +6,9 @@ public abstract class AbstractPage {
 
 	protected WebDriver driver;
 	
-	public abstract void init();
+	public AbstractPage(WebDriver driver){
+		this.driver = driver;
+	}
 	
 	public boolean checkPage(String partOfPageTitle){
 		return driver.getTitle().contains(partOfPageTitle);

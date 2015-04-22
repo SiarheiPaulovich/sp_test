@@ -4,6 +4,12 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
+
+/**
+ * 
+ * Currently is not used
+ *
+ */
 public class TestInjector {
 
 	private static Injector injector;

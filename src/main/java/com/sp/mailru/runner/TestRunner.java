@@ -1,29 +1,31 @@
 package com.sp.mailru.runner;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.List;
 
-import javax.xml.parsers.ParserConfigurationException;
-
+import org.apache.log4j.Logger;
 import org.testng.TestNG;
 import org.testng.xml.Parser;
 import org.testng.xml.XmlSuite;
-import org.xml.sax.SAXException;
 
 public class TestRunner {
 
+	private static final Logger LOG = Logger.getLogger(TestRunner.class);
+	
 	public static void main(String[] args) {
 		final TestNG testNG = new TestNG(true);
-		final Parser parser = new Parser("src\\main\\resources\\testng.xml");
+		File testng = new File("testng.xml");
+		if(! (testng.exists() && testng.canRead())){
+			LOG.error("TestNG config file 'testng.xml' is not accessable");
+			System.exit(1);
+		}
+		final Parser parser = new Parser("testng.xml");
 		List<XmlSuite> suites = null;
 		try {
 			suites = parser.parseToList();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			LOG.error("Error while parsing testng.xml: " + e.getMessage());
+			System.exit(1);
 		}
 		
 		if(testNG != null){

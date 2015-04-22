@@ -1,15 +1,10 @@
 package com.sp.mailru.tests;
 
-import java.util.concurrent.TimeUnit;
-
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Guice;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
@@ -30,16 +25,6 @@ public class TestLogin {
 	@DataProvider(name = "loginsTestProvider")
 	public Object[][] loadTestData() {
 		return new Object[][] { { "bad_mail", "bad_password", false }, { "TrueTestMail", "TruePassword", true } };
-	}
-
-	@Parameters({ "pageTimeout" })
-	@BeforeTest
-	public void init(@Optional("10") int timeoutInSeconds) {
-		driver.manage().timeouts()
-				.implicitlyWait(timeoutInSeconds, TimeUnit.SECONDS);
-		driver.manage().window().maximize();
-		openHomePage();
-		homePage.init();
 	}
 
 	@BeforeMethod

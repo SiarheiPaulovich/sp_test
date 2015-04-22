@@ -1,12 +1,9 @@
 package com.sp.mailru.tests;
 
-import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Guice;
-import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -24,16 +21,12 @@ public class TestLogout {
 	@Inject
 	private HomePage homePage;
 	
-	@Parameters({"pageTimeout"})
-	@BeforeTest
-	public void init(@Optional("100") int timeoutInSeconds) {
-		driver.manage().timeouts().implicitlyWait(timeoutInSeconds, TimeUnit.SECONDS);
-		driver.manage().window().maximize();
+	@BeforeMethod
+	public void openHomePage() {
 		homePage.openPage();
 		Assert.assertTrue(homePage.checkPage(ProjectConstants.HOME_PAGE_IDENTIFIER_BY_TITLE));
-		homePage.init();
 	}
-	
+
 	@Parameters({"username","password"})
 	@Test
 	public void testLogout(String username, String password) {
