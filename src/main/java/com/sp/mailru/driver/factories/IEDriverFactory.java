@@ -20,7 +20,6 @@ public class IEDriverFactory implements DriverFactory{
 			synchronized(this){
 				if(driver == null){
 					System.setProperty(IE_SYS_PROP_NAME, TestEnvConstants.IE_DRIVER_LOCAL_PATH);
-					new DesiredCapabilities();
 					DesiredCapabilities caps = DesiredCapabilities.internetExplorer();
 					caps.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
 					driver = new InternetExplorerDriver(caps);

@@ -44,7 +44,10 @@ public class LocalDriverFactory {
 		switch(type){		
 			case FIREFOX: return new FirefoxDriverFactory();
 			case CHROME: return new ChromeDriverFactory();
-			case IE: return new IEDriverFactory();
+			case IE: 
+				if(OsType.getOsType() == OsType.WIN) return new IEDriverFactory();
+				else throw new RuntimeException("Cannot use IEXPLORER driver on " + OsType.getOsType());
+				
 			default: throw new NotSupportedDriverTypeException(type);
 		}
 	}

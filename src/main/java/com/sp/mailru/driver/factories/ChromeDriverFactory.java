@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import com.sp.mailru.constants.TestEnvConstants;
+import com.sp.mailru.driver.OsType;
 import com.sp.mailru.driver.WebDriverType;
 
 public class ChromeDriverFactory implements DriverFactory{
@@ -18,7 +19,19 @@ public class ChromeDriverFactory implements DriverFactory{
 		if(driver == null){
 			synchronized(this){
 				if(driver == null){
-					System.setProperty(CHROME_SYS_PROP_NAME, TestEnvConstants.CHROME_DRIVER_LOCAL_PATH);
+					switch(OsType.getOsType()){
+					case WIN:
+						System.setProperty(CHROME_SYS_PROP_NAME, TestEnvConstants.CHROME_DRIVER_LOCAL_PATH_WIN);
+						break;
+					
+					case MAC:
+						System.setProperty(CHROME_SYS_PROP_NAME, TestEnvConstants.CHROME_DRIVER_LOCAL_PATH_MAC);
+						break;
+						
+					default:
+						throw new RuntimeException("Unknown CHROME driver installation path for OS: " + OsType.getOsType());
+					}
+					
 					driver = new ChromeDriver();
 				}
 			}

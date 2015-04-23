@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suite name="Task suite 1" verbose="1" >
+<suite name="Login/Logout/Inbox" verbose="1" >
   <parameter name="username" value="TrueTestMail" />
   <parameter name="password" value="TruePassword" />
   <listeners>
     <listener class-name="com.sp.mailru.runner.SuiteListener" />
   </listeners>
-  <test name="Task test 1" >
+  <test name="Login" >
     <classes>
       <class name="com.sp.mailru.tests.TestLogin"/>
     </classes>
  </test>
- <test name="Task test 2" >
+ <test name="Logout" >
     <classes>
       <class name="com.sp.mailru.tests.TestLogout"/>
     </classes>
  </test>
- <test name="Task test 3" >
+ <test name="Welcome mail received" >
     <classes>
       <class name="com.sp.mailru.tests.TestInboxMails"/>
     </classes>
